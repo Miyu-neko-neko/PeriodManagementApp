@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">生理管理アプリ</string>
+    <string name="please_add_date">生理開始日を入力してください</string>
+
+    <string-array name="year_array">
+        <item name="year_0">年</item>
+        <item name="year_2021">2021年</item>
+        <item name="year_2022">2022年</item>
+        <item name="year_2023">2023年</item>
+        <item name="year_2024">2024年</item>
+        <item name="year_2025">2025年</item>
+    </string-array>
+
+    <string-array name="month_array">月
+        <item name="january">1月</item>
+        <item name="february">2月</item>
+        <item name="march">3月</item>
+        <item name="april">4月</item>
+        <item name="may">5月</item>
+        <item name="june">6月</item>
+        <item name="july">7月</item>
+        <item name="august">8月</item>
+        <item name="september">9月</item>
+        <item name="october">10月</item>
+        <item name="november">11月</item>
+        <item name="december">12月</item>
+    </string-array>
+
+    <string-array name="date_array">
+        <item name="date_today0">日(曜日)</item>
+        <item name="date_today1">1日</item>
+        <item name="date_today2">2日</item>
+        <item name="date_today3">3日</item>
+        <item name="date_today4">4日</item>
+        <item name="date_today5">5日</item>
+        <item name="date_today6">6日</item>
+        <item name="date_today7">7日</item>
+        <item name="date_today8">8日</item>
+        <item name="date_today9">9日</item>
+        <item name="date_today10">10日</item>
+        <item name="date_today11">11日</item>
+        <item name="date_today12">12日</item>
+        <item name="date_today13">13日</item>
+        <item name="date_today14">14日</item>
+        <item name="date_today15">15日</item>
+        <item name="date_today16">16日</item>
+    </string-array>
+    <string name="register">登録</string>
+    <string name="record">これまでの記録</string>
+</resources>
