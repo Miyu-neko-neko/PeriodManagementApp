@@ -27,7 +27,7 @@
     </string-array>
 
     <string-array name="date_array">
-        <item name="date_today0">日(曜日)</item>
+        <item name="date_today0">日</item>
         <item name="date_today1">1日</item>
         <item name="date_today2">2日</item>
         <item name="date_today3">3日</item>
@@ -44,6 +44,11 @@
         <item name="date_today14">14日</item>
         <item name="date_today15">15日</item>
         <item name="date_today16">16日</item>
+        <item name="date_today17">17日</item>
+        <item name="date_today18">18日</item>
+        <item name="date_today19">19日</item>
+        <item name="date_today20">20日</item>
+        <item name="date_today21">21日</item>
     </string-array>
     <string name="register">登録</string>
     <string name="record">これまでの記録</string>

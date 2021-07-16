@@ -2,15 +2,16 @@ package com.example.periodmanagementapp2
 
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.TextView
-import io.realm.Realm
-import io.realm.RealmModel
-import io.realm.RealmObject
+import androidx.annotation.RequiresApi
+import io.realm.*
+import io.realm.kotlin.deleteFromRealm
 
 // リスト項目のデータ
 class ListItem(val title: String) {
@@ -29,8 +30,11 @@ data class ViewHolder(val listViewText: TextView, val deleteIcon: ImageButton)
 class CustomAdapter(context: Context, resource: Int, items: List<ListItem>) :
     ArrayAdapter<ListItem?>(context, resource, items), RealmModel {
 
-    lateinit var realm: Realm
+    private lateinit var realm: Realm
+    lateinit var result: RealmResults<PeriodData>
+
     //private val mItems: List<ListItem> = items
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var viewHolder: ViewHolder? = null
@@ -60,14 +64,24 @@ class CustomAdapter(context: Context, resource: Int, items: List<ListItem>) :
         viewHolder.listViewText.text = listItem!!.title
         viewHolder.deleteIcon.setOnClickListener { _ ->
             // 削除ボタンをタップしたときの処理
+            realm = Realm.getDefaultInstance()
+            result = realm.where(PeriodData::class.java).findAll().sort("Date_Day", Sort.DESCENDING)
+
+            val selectDB = result[position]!!
+            realm.beginTransaction()
+            selectDB.deleteFromRealm()
+            realm.commitTransaction()
+
             this.remove(listItem)
             this.notifyDataSetChanged()
+            realm.close()
         }
         return view!!
     }
-
-
-
 }
+
+
+
+
 
 
