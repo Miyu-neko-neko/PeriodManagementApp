@@ -28,14 +28,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     var itemsList = arrayListOf<ListItem>()
     var Date_Day_str: String = ""  //年月日
     var periodCycle_str: String = ""
-    var dateDayItem:String = ""
-    var yearItem:String = ""
-    var monthItem:String = ""
-    var int_spn_year:Int = 0
-    var int_spn_year_list:Int = 0
-    var int_spn_month:Int = 0
-    var int_spn_month_list:Int = 0
-    var int_spn_date:Int = 0
+    var dateDayItem: String = ""
+    var yearItem: String = ""
+    var monthItem: String = ""
+    var int_spn_year: Int = 0
+    var int_spn_year_list: Int = 0
+    var int_spn_month: Int = 0
+    var int_spn_month_list: Int = 0
+    var int_spn_date: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.N)
     private lateinit var binding: ActivityMainBinding
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         spinnerDateDay.adapter = Adapter3
 
         spinnerYear.setSelection(today.get(Calendar.YEAR))
-        if(today.get(Calendar.YEAR) == 2021) {
+        if (today.get(Calendar.YEAR) == 2021) {
             yearPosition = 1
             spinnerYear.setSelection(yearPosition)
         }
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
                 //選択されたitemを取得
                 dateDayItem = parent.selectedItem as String
                 int_spn_date = spinnerDateDay.getSelectedItemPosition()
-                Log.v("MainActivity", "int_spn_date= "+int_spn_date+"")
+                Log.v("MainActivity", "int_spn_date= " + int_spn_date + "")
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
                 monthItem = parent.selectedItem as String
 
                 int_spn_month = spinnerMonth.getSelectedItemPosition()
-                Log.v("MainActivity", "int_spn_month= "+int_spn_month+"")
+                Log.v("MainActivity", "int_spn_month= " + int_spn_month + "")
 
                 when (int_spn_month) {
                     0 -> {//0は1月
@@ -183,9 +183,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
                         int_spn_month_list = 12
                     }
                 }
-                Log.v("MainActivity", "int_spn_month_list= "+int_spn_month_list+"")
+                Log.v("MainActivity", "int_spn_month_list= " + int_spn_month_list + "")
 
-                }
+            }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
@@ -209,6 +209,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         val strDate = dateDayItem
 
         Date_Day_str = strYear + strMonth + strDate
+        Log.v("MainActivity", "Date_Day_str= " + Date_Day_str + "")
 
         var PeriodData = realm.createObject(PeriodData::class.java)
         PeriodData.Date_Day = Date_Day_str
@@ -217,24 +218,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         val intYear = int_spn_year_list
         val intMonth = int_spn_month_list
         val intDate = int_spn_date
-        var SelectedDateFromList:String = ""
+        var SelectedDateFromList: String = ""
 
         //スピナーで選択した値
-        val selectedDateFromSpn = LocalDate.of(intYear, intMonth, intDate)
-        Log.v("MainActivity", "SelectedDateFromSpn= "+selectedDateFromSpn+"")
+        val selectedDateFromSpn = LocalDate.of(intYear, intMonth, intDate)  //2021-9-15
+        Log.v("MainActivity", "SelectedDateFromSpn= " + selectedDateFromSpn + "")
 
         //初回はlistViewの0番目の日付をもってくる
-        //2回目以降はlistViewの1番目の日付をもってくる
+        //1,2行目はlistViewの1番目の日付をもってくる
+        //10月からズレる
         val listView = binding.listView
-        if (listView.isEmpty()){
+        if (listView.isEmpty()) {
             SelectedDateFromList = result[0]!!.Date_Day //例：2021年8月15日
-        }else{
+        } else {
             SelectedDateFromList = result[1]!!.Date_Day
         }
-        Log.v("MainActivity", "SelectedDateFromList= "+SelectedDateFromList+"")
+        Log.v("MainActivity", "SelectedDateFromList= " + SelectedDateFromList + "")
+
+
 
         val array = SelectedDateFromList.split("年", "月", "日")//2021, 8, 15,
-        Log.v("MainActivity", "array= "+array+"")
+        Log.v("MainActivity", "array= " + array + "")
 
         //substringで何番目から何番目の文字を取り出すか入力
         //endIndexで指定されたインデックスの文字は含まれない
@@ -243,28 +247,58 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         val intMonthFromList = array[1].toInt()
 
         val intDateFromList = array[2].toInt()
-                Log.v("MainActivity", "intYearFromList= "+intYearFromList+"")
-                Log.v("MainActivity", "intMonthFromList= "+intMonthFromList+"")
+        Log.v("MainActivity", "intYearFromList= " + intYearFromList + "")
+        Log.v("MainActivity", "intMonthFromList= " + intMonthFromList + "")
 
         val day1_fromListView = LocalDate.of(intYearFromList, intMonthFromList, intDateFromList)
-                Log.v("MainActivity", "day1_fromListView= "+day1_fromListView+"")
-        val diff = ChronoUnit.DAYS.between(day1_fromListView,selectedDateFromSpn).toString()
+        Log.v("MainActivity", "day1_fromListView= " + day1_fromListView + "")
+
+        if (selectedDateFromSpn < day1_fromListView) { //spinnerの年月日がlistViewの年月日よりも小さかったらエラー
+            AlertDialog.Builder(this)
+                .setTitle("ERROR！")
+                .setMessage("すでに入力済みです")
+                .setPositiveButton("OK") { dialog, which -> }
+                .show()
+        }
+
+        try {
+            if (selectedDateFromSpn < day1_fromListView) { //Realm is already in a write transaction
+                throw IllegalArgumentException("エラー: すでに入力済みです")
+                realm.cancelTransaction()
+                //realm.beginTransaction()
+                realm.close()
+            }
+        } catch (e: Exception) {
+            System.err.println("エラー: すでに入力済みです")
+            return
+        }
+
+        //if (selectedDateFromSpn < day1_fromListView) { //Realm is already in a write transaction
+            Log.v("MainActivity", "ifTest= ")
+        //throw IllegalArgumentException("エラー: すでに入力済みです")
+           // realm.cancelTransaction()
+            //realm.beginTransaction()
+        //}
+
+        val diff = ChronoUnit.DAYS.between(day1_fromListView, selectedDateFromSpn).toString()
         periodCycle_str = ("周期:" + diff + "日")
-                Log.v("MainActivity", "periodCycle_str= "+periodCycle_str+"")
+        Log.v("MainActivity", "periodCycle_str= " + periodCycle_str + "")
 
         //常に0番目に追加していく
-        itemsList.add(0,ListItem(Date_Day_str + "    " + periodCycle_str))
+        itemsList.add(0, ListItem(Date_Day_str + "    " + periodCycle_str))
 
         customAdapter = CustomAdapter(
             this,
             R.id.item_title,
-            itemsList)
+            itemsList
+        )
 
         binding.listView.adapter = customAdapter
 
         realm.commitTransaction()//データベースの使用を終了する
 
     }
+
 
     //ListViewの表示方法
     @RequiresApi(Build.VERSION_CODES.N)
@@ -275,6 +309,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
         //年月日順で表示
         result = realm.where(PeriodData::class.java).findAll().sort("Date_Day", Sort.DESCENDING)
+        Log.v("MainActivity", "result " + result + "")
 
         //取得したデータの行数
         //1行ずつ取り出すために宣言する
@@ -284,6 +319,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             //年月日、周期、ゴミ箱のイラストボタン
             itemsList.add(ListItem(result[i]!!.Date_Day + "    " + result[i]!!.periodCycle))
         }
+
 
         customAdapter = CustomAdapter(this, R.id.item_title, itemsList)
 

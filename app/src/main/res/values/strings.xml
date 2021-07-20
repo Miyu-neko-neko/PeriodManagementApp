@@ -12,15 +12,15 @@
     </string-array>
 
     <string-array name="month_array">月
-        <item name="january">1月</item>
-        <item name="february">2月</item>
-        <item name="march">3月</item>
-        <item name="april">4月</item>
-        <item name="may">5月</item>
-        <item name="june">6月</item>
-        <item name="july">7月</item>
-        <item name="august">8月</item>
-        <item name="september">9月</item>
+        <item name="january">01月</item>
+        <item name="february">02月</item>
+        <item name="march">03月</item>
+        <item name="april">04月</item>
+        <item name="may">05月</item>
+        <item name="june">06月</item>
+        <item name="july">07月</item>
+        <item name="august">08月</item>
+        <item name="september">09月</item>
         <item name="october">10月</item>
         <item name="november">11月</item>
         <item name="december">12月</item>

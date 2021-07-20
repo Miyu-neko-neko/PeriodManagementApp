@@ -74,7 +74,7 @@ class CustomAdapter(context: Context, resource: Int, items: List<ListItem>) :
 
             this.remove(listItem)
             this.notifyDataSetChanged()
-            realm.close()
+            //realm.close()
         }
         return view!!
     }
