@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="addapterClass"
+            name="adapterClass"
             type="com.example.periodmanagementapp2.CustomAdapter" />
     </data>
 

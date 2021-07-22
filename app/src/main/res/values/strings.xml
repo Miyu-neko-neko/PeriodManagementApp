@@ -28,15 +28,15 @@
 
     <string-array name="date_array">
         <item name="date_today0">日</item>
-        <item name="date_today1">1日</item>
-        <item name="date_today2">2日</item>
-        <item name="date_today3">3日</item>
-        <item name="date_today4">4日</item>
-        <item name="date_today5">5日</item>
-        <item name="date_today6">6日</item>
-        <item name="date_today7">7日</item>
-        <item name="date_today8">8日</item>
-        <item name="date_today9">9日</item>
+        <item name="date_today1">01日</item>
+        <item name="date_today2">02日</item>
+        <item name="date_today3">03日</item>
+        <item name="date_today4">04日</item>
+        <item name="date_today5">05日</item>
+        <item name="date_today6">06日</item>
+        <item name="date_today7">07日</item>
+        <item name="date_today8">08日</item>
+        <item name="date_today9">09日</item>
         <item name="date_today10">10日</item>
         <item name="date_today11">11日</item>
         <item name="date_today12">12日</item>
@@ -49,6 +49,16 @@
         <item name="date_today19">19日</item>
         <item name="date_today20">20日</item>
         <item name="date_today21">21日</item>
+        <item name="date_today22">22日</item>
+        <item name="date_today23">23日</item>
+        <item name="date_today24">24日</item>
+        <item name="date_today25">25日</item>
+        <item name="date_today26">26日</item>
+        <item name="date_today27">27日</item>
+        <item name="date_today28">28日</item>
+        <item name="date_today29">29日</item>
+        <item name="date_today30">30日</item>
+        <item name="date_today31">31日</item>
     </string-array>
     <string name="register">登録</string>
     <string name="record">これまでの記録</string>

@@ -123,6 +123,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
                     3 -> {
                         int_spn_year_list = 2023
                     }
+                    4 -> {
+                        int_spn_year_list = 2024
+                    }
+                    5 -> {
+                        int_spn_year_list = 2025
+                    }
                 }
                 Log.v("MainActivity", "int_spn_year_list= " + int_spn_year_list + "")
             }
@@ -211,10 +217,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         Date_Day_str = strYear + strMonth + strDate
         Log.v("MainActivity", "Date_Day_str= " + Date_Day_str + "")
 
-        var PeriodData = realm.createObject(PeriodData::class.java)
-        PeriodData.Date_Day = Date_Day_str
-        PeriodData.periodCycle = periodCycle_str
-
         val intYear = int_spn_year_list
         val intMonth = int_spn_month_list
         val intDate = int_spn_date
@@ -224,14 +226,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         val selectedDateFromSpn = LocalDate.of(intYear, intMonth, intDate)  //2021-9-15
         Log.v("MainActivity", "SelectedDateFromSpn= " + selectedDateFromSpn + "")
 
-        //初回はlistViewの0番目の日付をもってくる
-        //1,2行目はlistViewの1番目の日付をもってくる
-        //10月からズレる
+        //初回はspinnerで選択した日付をもってくる
+        //次回からは常にlistViewの0番目の日付をもってくる
         val listView = binding.listView
         if (listView.isEmpty()) {
-            SelectedDateFromList = result[0]!!.Date_Day //例：2021年8月15日
+            SelectedDateFromList = Date_Day_str //例：2021年08月15日
         } else {
-            SelectedDateFromList = result[1]!!.Date_Day
+            SelectedDateFromList = result[0]!!.Date_Day
         }
         Log.v("MainActivity", "SelectedDateFromList= " + SelectedDateFromList + "")
 
@@ -254,34 +255,31 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         Log.v("MainActivity", "day1_fromListView= " + day1_fromListView + "")
 
         if (selectedDateFromSpn < day1_fromListView) { //spinnerの年月日がlistViewの年月日よりも小さかったらエラー
+            Log.v("MainActivity", "ERROR！すでに入力済みです")
             AlertDialog.Builder(this)
                 .setTitle("ERROR！")
                 .setMessage("すでに入力済みです")
                 .setPositiveButton("OK") { dialog, which -> }
                 .show()
+            realm.commitTransaction()
+            return
         }
 
-        try {
+        /*try {
             if (selectedDateFromSpn < day1_fromListView) { //Realm is already in a write transaction
                 throw IllegalArgumentException("エラー: すでに入力済みです")
-                realm.cancelTransaction()
-                //realm.beginTransaction()
-                realm.close()
             }
         } catch (e: Exception) {
             System.err.println("エラー: すでに入力済みです")
             return
-        }
+        }*/
 
-        //if (selectedDateFromSpn < day1_fromListView) { //Realm is already in a write transaction
-            Log.v("MainActivity", "ifTest= ")
-        //throw IllegalArgumentException("エラー: すでに入力済みです")
-           // realm.cancelTransaction()
-            //realm.beginTransaction()
-        //}
+        var PeriodData = realm.createObject(PeriodData::class.java)
+        PeriodData.Date_Day = Date_Day_str
 
         val diff = ChronoUnit.DAYS.between(day1_fromListView, selectedDateFromSpn).toString()
         periodCycle_str = ("周期:" + diff + "日")
+        PeriodData.periodCycle = periodCycle_str
         Log.v("MainActivity", "periodCycle_str= " + periodCycle_str + "")
 
         //常に0番目に追加していく
@@ -315,11 +313,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         //1行ずつ取り出すために宣言する
         val length = result.size
 
-        for (i in 0..length - 1) {
-            //年月日、周期、ゴミ箱のイラストボタン
+        for (i in 0..length -1){
             itemsList.add(ListItem(result[i]!!.Date_Day + "    " + result[i]!!.periodCycle))
         }
 
+            /*result.forEach {
+            //年月日、周期、ゴミ箱のイラストボタン
+         itemsList.add(ListItem(it.Date_Day + "    " + it.periodCycle))
+        }*/
 
         customAdapter = CustomAdapter(this, R.id.item_title, itemsList)
 
