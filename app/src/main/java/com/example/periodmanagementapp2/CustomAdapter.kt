@@ -1,6 +1,5 @@
 package com.example.periodmanagementapp2
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
